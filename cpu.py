@@ -3,7 +3,7 @@ import pyrtl
 #Memblocks
 i_mem = pyrtl.MemBlock(bitwidth=32, addrwidth=32, name='i_mem')
 d_mem = pyrtl.MemBlock(bitwidth=32, addrwidth=32, name='d_mem', asynchronous = True)
-rf    = pyrtl.MemBlock(bitwidth=32, addrwidth=5, name='rf', max_read_ports=3, asynchronous = True)
+rf    = pyrtl.MemBlock(bitwidth=32, addrwidth=32, name='rf', max_read_ports=3, asynchronous = True)
 
 #Cycle through instructions
 pc = pyrtl.Register(bitwidth=32, name ='pc')
@@ -128,7 +128,7 @@ with pyrtl.conditional_assignment:
 #Register Variables
 r_reg0 = pyrtl.WireVector(bitwidth=5, name = 'r_reg0')
 r_reg1 = pyrtl.WireVector(bitwidth=5, name = 'r_reg1')
-w_data = pyrtl.WireVector(bitwidth=16, name ='w_data')
+w_data = pyrtl.WireVector(bitwidth=32, name ='w_data')
 w_reg = pyrtl.WireVector(bitwidth = 5, name ='w_reg')
 
 #Register Logic
@@ -291,6 +291,11 @@ if __name__ == '__main__':
     print(sim.inspect_mem(rf))
 
     # Perform some sanity checks to see if your program worked correctly
-    assert (sim.inspect_mem(d_mem)[0] == 10)
-    assert (sim.inspect_mem(rf)[8] == 10)  # $v0 = rf[8]
+    assert(sim.inspect_mem(rf)[9] == 84)
+    assert(sim.inspect_mem(rf)[10] == 85)
+    assert(sim.inspect_mem(rf)[11] == 0xFFFFFFAB)
+    assert(sim.inspect_mem(rf)[12] == 0)
+    assert(sim.inspect_mem(rf)[13] == 1)
+    assert(sim.inspect_mem(rf)[14] == 0)
+    assert(sim.inspect_mem(rf)[15] == 0xA0000)
     print('Passed!')
