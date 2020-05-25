@@ -211,10 +211,9 @@ with pyrtl.conditional_assignment:
     with mem_write==1:
         #alu_out holds address
         d_mem[alu_out] |= w_data
-    #LW
     with reg_write==1:
-        rf[w_reg] |= w_data
-
+        with w_reg!=0:
+            rf[w_reg] |= w_data
 if __name__ == '__main__':
 
     """
